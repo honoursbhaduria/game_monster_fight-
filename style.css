@@ -1,43 +1,118 @@
-   body {
-    background-color: darkblue;
-  }
-  
-  #text {
-    background-color: black;
-    color: white;
-    padding: 10px;
-  }
-  
-  #game {
-    max-width: 500px;
-    max-height: 400px;
-    background-color: lightgray;
-    color: white;
-    margin: 0 auto;
-    padding: 10px;
-  }
-  
-  #controls {
-    border: 1px black solid;
-    padding: 5px;
-  }
-  
-  #stats {
-    border: 1px black solid;
-    color: black;
-    padding: 5px;
-  }
-  
-  #monsterStats {
-    display: none;
-    border: 1px black solid;
-    color: white;
-    padding: 5px;
-    background-color: red;
-  }
-  
-  .stat {
-    padding-right: 10px;
-  } 
+body {
+  background-color: darkblue;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
 
-    
+#text {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+#game {
+  max-width: 500px;
+  max-height: 400px;
+  background-color: lightgray;
+  color: white;
+  margin: 20px auto;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+}
+
+#controls, #stats, #monsterStats {
+  border: 1px solid black;
+  padding: 5px;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+#stats {
+  color: black;
+}
+
+#monsterStats {
+  display: none;
+  background-color: red;
+  color: white;
+}
+
+.stat {
+  padding-right: 10px;
+}
+
+/* 📱 Mobile Responsive */
+@media (max-width: 600px) {
+  #game {
+    width: 90%;
+    max-width: none;
+    max-height: none;
+  }
+
+  #text {
+    font-size: 16px;
+  }
+
+  #controls, #stats, #monsterStats {
+    font-size: 14px;
+  }
+}
+#footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: linear-gradient(to right, #111, #222, #111);
+  color: #f1c40f; /* Golden warrior color */
+  text-align: center;
+  padding: 10px 0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  z-index: 1000;
+  border-top: 2px solid #f1c40f;
+}
+
+#footer p {
+  margin: 5px 0;
+}
+
+#footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: linear-gradient(to right, #0d0d0d, #1a1a1a, #0d0d0d);
+  color: #00ffcc; /* Cool neon vibe */
+  text-align: center;
+  padding: 12px 0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  z-index: 1000;
+  border-top: 2px solid #00ffcc;
+}
+
+#footer p {
+  margin: 5px 0;
+}
+
+#footer a {
+  color: #00ffcc;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#footer a:hover {
+  text-decoration: underline;
+}
+
+.github-icon {
+  width: 28px;
+  height: 28px;
+  margin-top: 5px;
+  transition: transform 0.4s ease;
+}
+
+.github-icon:hover {
+  transform: rotate(15deg) scale(1.2);
+}

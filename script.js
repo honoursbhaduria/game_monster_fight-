@@ -106,7 +106,7 @@ const locations = [
     {
         
         name : "win",
-        "button text": ["REPLAY!", "REPLAY!", "REPLAY!"],
+        "button text": ["superboss fight !", "REPLAY!", "REPLAY!"],
         "button functions": [fightSuperBoss, fightDragon, restart],
         text: "You defeat the dragon ! YOU WIN THE GAME "
     
@@ -181,6 +181,8 @@ function buyWeapon() {
         currentWeapon++;
         let newWeapon = weapons[currentWeapon].name;
         inventory.push(newWeapon);
+        updateInventoryCount();
+
   
         goldText.innerText = gold;
         text.innerText = "You now have a  " + newWeapon + ". In your inventory";
@@ -192,6 +194,8 @@ function buyWeapon() {
       button2.innerText = "Sell weapon for 15 gold";
       button2.onclick = sellWeapon;
     }
+   
+
   }
 
 
@@ -200,12 +204,16 @@ function sellWeapon(){
         gold += 15 ;
         goldText.innerText = gold ;
         let currentWeapon  = inventory.shift() ;
+        updateInventoryCount();
+
         text.innerText = "You sold a  " + currentWeapon + "." ; 
         text.innerText = "In your inventory you have :  " + inventory ; 
     }
     else{
          text.innerText = "Don't sell your only weapon ! " ;
     }
+    
+
 }
 
 
@@ -339,6 +347,7 @@ function restart(){
     gold = 50 ;
     currentWeapon = 0 ;
     inventory = ["stick"];
+    updateInventoryCount();
     goldText.innerText = gold ;
     healthText.innerText = health ;
     xpText.innerText = xp ;
@@ -408,3 +417,10 @@ function pick(guess){
     
 
 }
+
+function updateInventoryCount() {
+    document.getElementById("inventoryCount").innerText = inventory.length;
+}
+
+
+updateInventoryCount();

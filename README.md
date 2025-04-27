@@ -94,6 +94,4 @@ Built for the brave, not for the sane.
 The monsters are hungry.  
 Your destiny awaits.
 
----
 
----
