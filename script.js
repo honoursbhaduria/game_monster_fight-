@@ -32,7 +32,8 @@ const weapons =  [
     {
         name : "sword",
         power : 100
-    }
+    },
+    { name: "Super Sword", power: 9999 }
 ];
 
 const monsters =  [
@@ -54,7 +55,7 @@ const monsters =  [
     // unbeateable monster
     {
         name : "godfather dragon ",
-        level : 999 ,
+        level : 9999 ,
         health : 999999999  
     },
 
@@ -78,7 +79,7 @@ const locations = [
         name : "cave",
         "button text": ["Fight slime", "Fight fanged beast", "Go to town square"],
         "button functions": [fightSlime, fightBeast, goTown],
-        text: "you enter the cave .  You see some monsters "
+        text: "you  enter  the  cave .  You see some monsters "
 
     },
     {
@@ -87,6 +88,41 @@ const locations = [
         "button functions": [attack, dodge, goTown],
         text: " You are fighting a monster . "
 
+    },
+    {
+        name : "kill monster",
+        "button text": ["Go to town sqaure", "Go to town sqaure", "Go to town sqaure"],
+        "button functions": [goTown, goTown, easterEgg],
+        text: " the monster  screams arg !  as it dies  you gain experience points and find gold .  . "
+    },
+    {
+        
+            name : "lose",
+            "button text": ["REPLAY!", "REPLAY!", "REPLAY!"],
+            "button functions": [restart, restart, restart],
+            text: " YOU DIE YOU PIEACE OF SH#T  ( SAID BY MONSTER :^) "
+        
+    },
+    {
+        
+        name : "win",
+        "button text": ["REPLAY!", "REPLAY!", "REPLAY!"],
+        "button functions": [fightSuperBoss, fightDragon, restart],
+        text: "You defeat the dragon ! YOU WIN THE GAME "
+    
+    },
+    {
+        name: "super boss",
+        "button text": ["REPLAY!", "REPLAY!", "REPLAY!"],
+        "button functions": [restart, restart, restart],
+        text: "You have defeated the Godfather Dragon and saved the world!"
+      },
+    {
+
+        name: "easter egg",
+        "button text": ["2 ", "8 ", "Go to town sqaure "],
+        "button functions": [pickTwo, pickEight, goTown],
+        text: "you find the secret game . pick a number above . Ten numbers will be randomly chosen between 0 to 10 . If the number you choose matches one of the random numbers ,  you win ! "
     }
 ];
 
@@ -107,6 +143,7 @@ function update(location) {
 
 function goTown() {
     update(locations[0]);
+    monsterStats.style.display = "none" ; 
 }
 
 function goStore() {
@@ -117,9 +154,13 @@ function goCave() {
     update(locations[2]);
 }
 
-function fightDragon() {
-    console.log("Fighting dragon...");
+
+
+function fightSuperBoss() {
+    fighting = 3;
+    goFight();
 }
+
 
 function buyHealth() {
     if (gold >= 10 ){
@@ -142,7 +183,7 @@ function buyWeapon() {
         inventory.push(newWeapon);
   
         goldText.innerText = gold;
-        text.innerText = "You now have a " + newWeapon + ". In your inventory";
+        text.innerText = "You now have a  " + newWeapon + ". In your inventory";
       } else {
         text.innerText = "You do not have enough gold to buy a weapon.";
       }
@@ -159,7 +200,7 @@ function sellWeapon(){
         gold += 15 ;
         goldText.innerText = gold ;
         let currentWeapon  = inventory.shift() ;
-        text.innerText = "You sold a " + currentWeapon + "." ; 
+        text.innerText = "You sold a  " + currentWeapon + "." ; 
         text.innerText = "In your inventory you have :  " + inventory ; 
     }
     else{
@@ -192,17 +233,178 @@ function goFight(){
     monsterHealthText.innerText = monsterHealth ;
     
 }
+function attack() {
+    text.innerText = "The " + monsters[fighting].name + " attacks.";
+    text.innerText += " You attack it with your " + weapons[currentWeapon].name + ".";
+  
+    // Monster attacks player
+    if(isMonsterHit()){
+        health -= getMonsterAttackValue(monsters[fighting].level);
+    }
 
-function attack(){
-    text.innerText = "The" + monsters[fighting].name + "attacks." ;
-    text.innerText += "You attack it with your " +weapons[currentWeapon].name + "." ;
-    health -= monsters[fighting].level ;
-    monsterHealth -= weapons[currentWeapon].power + Math.floor(Math.random()*xp) + 1 ; 
+    else{
+        text.innerText += "you miss" ; 
+        
+    }
     
+    // Player attacks monster
+    monsterHealth -= weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1;
+  
+    // Update healths on the screen
+    healthText.innerText = health;
+    monsterHealthText.innerText = monsterHealth;
+  
+    // Check for lose condition
+    if (health <= 0) {
+      lose();
+    }
+    // Check for win condition
+    else if (monsterHealth <= 0) {
+      if (fighting === 2) {
+        winGame(); // defeating dragon
+      } 
+      else if (fighting === 3) {
+        update(locations[7]); // "super boss" location
+      }
+
+      else if(Math.random()<= .08 && inventory.length !== 1 ){
+        text.innerText += "Your" + inventory.pop()+ "breaks " ; 
+
+        currentWeapon-- ;
+
+
+      }
+      else {
+        defeatMonster(); // defeating regular monsters
+      }
+    }
+  }
+  
+
+// if (age>= 18){
+//     adultFunction();
+// }
+// else{
+//     kidfunction();
+// }
+
+
+// age >= 18 ?  adultFunction():kidfunction();
+
+function getMonsterAttackValue(level){
+    let hit  = (level *5 ) - (Math.floor(Math.random()*xp));
+    return hit ; 
 
 
 }
 
+function isMonsterHit(){
+    return Math.random() > .2 || health < 20 ; 
+}
+
+
 function dodge(){
+    text.innerText = "You dodge the attack from the " + monsters[fighting].name + "." ;
+
+}
+
+function defeatMonster() {
+    gold += Math.floor(monsters[fighting].level * 6.7);
+    xp += monsters[fighting].level;
+    goldText.innerText = gold;
+    xpText.innerText = xp;
+    monsterStats.style.display = "none"; // hide monster stats after kill 
+    update(locations[4]); // go to "kill monster" locations 
+  }
+  
+
+function lose(){
+    if(fighting === 3){
+    update(locations[5]);
+    text.innerText = "Congratulations! You've defeated the Godfather Dragon and saved the world!";
+    }
+    else {
+        update(locations[4]);
+    }
+
+}
+
+function winGame(){
+    update(locations[6]);
+}
+
+function restart(){
+    xp = 0 ;
+    health = 100 ;
+    gold = 50 ;
+    currentWeapon = 0 ;
+    inventory = ["stick"];
+    goldText.innerText = gold ;
+    healthText.innerText = health ;
+    xpText.innerText = xp ;
+    monsterStats.style.display = "none";
+    goTown();
+}
+
+
+function lose() {
+    if (fighting === 3) {
+      // Special loss after fighting the Godfather Dragon
+      update(locations[5]);
+      text.innerText = "You were no match for the Godfather Dragon... Better luck next time!";
+    } else {
+      // Normal lose logic for regular monsters
+      update(locations[5]);
+    }
+  }
+
+
+function easterEgg(){
+    update(locations[8])
+}
+
+function pickTwo(){
+    pick(2);
+}
+
+function pickEight(){
+    pick(8);
+}
+
+function pick(guess){
+    let numbers = [];
+    while (numbers.length < 10){
+        numbers.push(Math.floor(Math.random()*11));
+    }
+
+
+    text.innerText = "You picked "+ guess + ". here are the random numbers : \n"
+    for (let i = 0 ; i< 10 ; i++){
+        text.innerText += numbers[i] + "\n" ;
+
+    }
+    if (numbers.indexOf(guess) !== -1 ){
+        let prize = Math.random(); // get random number between 0 and 1
+        if (prize < 0.9) { // 90% chance
+            text.innerText = "Right! You won 2000 gold!";
+            gold += 2000;
+            goldText.innerText = gold;
+        } else { // 10% chance
+            text.innerText = "Right! You unlocked the legendary SUPER SWORD!!";
+            if (!inventory.includes("Super Sword")) { 
+                inventory.push("Super Sword");
+                currentWeapon = weapons.length - 1; // equip Super Sword
+            }
+        }
+    }
+    else {
+        text.innerText += "Wrong! You lose 10 Health!";
+        health -= 10;
+        healthText.innerText = health;
+        if (health <= 0 ){
+            lose();
+        }
+    }
     
+
 }
